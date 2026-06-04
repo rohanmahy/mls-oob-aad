@@ -9,20 +9,20 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+# area: AREA
+# workgroup: WG Working Group
 keyword:
  - MLS AAD
  - additional authenticated data
  - authenticated_data
  - sage_aad
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+#  group: WG
+#  type: Working Group
+#  mail: WG@example.com
+#  arch: https://example.com/WG
+  github: "rohanmahy/mls-oob-aad"
+  latest: "https://rohanmahy.github.io/mls-oob-aad/draft-mahy-oob-aad.html"
 
 author:
  -
