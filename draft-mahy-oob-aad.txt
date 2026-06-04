@@ -1,0 +1,192 @@
+
+
+
+
+WG Working Group                                                 R. Mahy
+Internet-Draft                                               4 June 2026
+Intended status: Informational                                          
+Expires: 6 December 2026
+
+
+      MLS Extension for Out-Of-Band Additional Authenticated Data
+                       draft-mahy-oob-aad-latest
+
+Abstract
+
+   This document specifies an explicit way to signal that the Additional
+   Authenticated Data does include or should include data elements that
+   are conveyed out-of-band (ex: are not in the MLS message).
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://example.com/LATEST.  Status information for this document may
+   be found at https://datatracker.ietf.org/doc/draft-mahy-oob-aad/.
+
+   Discussion of this document takes place on the WG Working Group
+   mailing list (mailto:WG@example.com), which is archived at
+   https://example.com/WG.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/USER/REPO.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 6 December 2026.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  Mechanism
+   4.  Security Considerations
+   5.  IANA Considerations
+   6.  References
+     6.1.  Normative References
+     6.2.  Informative References
+   Acknowledgments
+   Author's Address
+
+1.  Introduction
+
+   The Messaging Layer Security (MLS) protocol includes message types
+   with Additional Authenticated Data.
+
+   [I-D.pham-mls-additional-wire-formats] defined new MLS Wire Formats
+   for a similar purpose, however the Wire Format should be orthogonal
+   to out-of-band AAD functionality.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   Out-Of-Band AAD and In-Band AAD.
+
+3.  Mechanism
+
+   struct {
+       opaque group_id<V>;
+       uint64 epoch;
+       ContentType content_type;
+       SafeAADItem oob_aad<V>;        /*  <== this is new     */
+       opaque authenticated_data<V>;  /* usually just SafeAAD */
+   } PrivateContentAAD;
+
+   struct {
+       ProtocolVersion version = mls10;
+       WireFormat wire_format;
+       FramedContent content;         /* can contain SafeAAD  */
+       SafeAADItem oob_aad<V>;        /*  <== this is new     */
+       select (FramedContentTBS.content.sender.sender_type) {
+           case member:
+           case new_member_commit:
+               GroupContext context;
+           case external:
+           case new_member_proposal:
+               struct{};
+       };
+   } FramedContentTBS;
+
+   Consists of:
+
+   *  a oob-aad extension type.  This specification cannot be a "safe"
+      extension according to [I-D.ietf-mls-extensions] since it requires
+      the MLS stack to modify its behavior outside of the concept of the
+      specific components it also defines.  The presence of the oob-aad
+      extension type in the GroupContext means that all members of the
+      group support the extensions and that if an out-of-band AAD
+      component is signaled, the members of the room will include its
+      actual value in Out-Of-Band AAD, without communicating it in the
+      authenticated_data.
+
+   *  an default-oob-aad-component component type.  When present in the
+      app_data_dictionary in the GroupContext
+
+   *  an as-needed-oob-aad-component component type.
+
+      -  When present in the app_data_dictionary in the GroupContext it
+         enumerates OOB AAD that can be signaled on a per-message basis.
+
+      -  When present as a SafeAadItem in the aad_items list in the
+         authenticated_content, the out-of-band value of each signaled
+         as-needed component is also included in the Out-Of-Band AAD.
+
+4.  Security Considerations
+
+   TODO Security
+
+5.  IANA Considerations
+
+   This document has no IANA actions.
+
+6.  References
+
+6.1.  Normative References
+
+   [I-D.ietf-mls-extensions]
+              Robert, R., "The Messaging Layer Security (MLS)
+              Extensions", Work in Progress, Internet-Draft, draft-ietf-
+              mls-extensions-09, 2 March 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-mls-
+              extensions-09>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+6.2.  Informative References
+
+   [I-D.pham-mls-additional-wire-formats]
+              Pham, A., Mularczyk, M., Robert, R., and P. Slatala, "MLS
+              Wire Formats for PublicMessage and PrivateMessage without
+              authenticated_data", Work in Progress, Internet-Draft,
+              draft-pham-mls-additional-wire-formats-00, 21 October
+              2024, <https://datatracker.ietf.org/doc/html/draft-pham-
+              mls-additional-wire-formats-00>.
+
+Acknowledgments
+
+   TODO acknowledge.
+
+Author's Address
+
+   Rohan Mahy
+   Email: rohan.ietf@gmail.com
