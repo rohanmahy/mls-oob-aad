@@ -90,7 +90,7 @@ struct {
 Consists of:
 
 - a `oob-aad` extension type. This specification cannot be a "safe" extension according to {{!I-D.ietf-mls-extensions}} since it requires the MLS stack to modify its behavior outside of the concept of the specific components it also defines. The presence of the `oob-aad` extension type in the GroupContext means that all members of the group support the extensions and that if an out-of-band AAD component is signaled, the members of the room will include its actual value in Out-Of-Band AAD, without communicating it in the `authenticated_data`.
-- an `default-oob-aad-component` component type. When present in the `app_data_dictionary` in the GroupContext
+- an `default-oob-aad-component` component type. When present in the `app_data_dictionary` in the GroupContext, the out-of-band value of each signaled as-needed component is also included in the Out-Of-Band AAD.
 - an `as-needed-oob-aad-component` component type.
   - When present in the `app_data_dictionary` in the GroupContext it enumerates OOB AAD that can be signaled on a per-message basis.
   - When present as a `SafeAadItem` in the `aad_items` list in the `authenticated_content`, the out-of-band value of each signaled as-needed component is also included in the Out-Of-Band AAD.
