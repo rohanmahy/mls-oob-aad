@@ -2,10 +2,10 @@
 
 
 
-WG Working Group                                                 R. Mahy
-Internet-Draft                                               4 June 2026
+Network Working Group                                            R. Mahy
+Internet-Draft                                              16 July 2026
 Intended status: Informational                                          
-Expires: 6 December 2026
+Expires: 17 January 2027
 
 
       MLS Extension for Out-Of-Band Additional Authenticated Data
@@ -22,15 +22,12 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://example.com/LATEST.  Status information for this document may
-   be found at https://datatracker.ietf.org/doc/draft-mahy-oob-aad/.
-
-   Discussion of this document takes place on the WG Working Group
-   mailing list (mailto:WG@example.com), which is archived at
-   https://example.com/WG.
+   https://rohanmahy.github.io/mls-oob-aad/draft-mahy-oob-aad.html.
+   Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-mahy-oob-aad/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/USER/REPO.
+   https://github.com/rohanmahy/mls-oob-aad.
 
 Status of This Memo
 
@@ -47,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 December 2026.
+   This Internet-Draft will expire on 17 January 2027.
 
 Copyright Notice
 
@@ -133,7 +130,9 @@ Table of Contents
       authenticated_data.
 
    *  an default-oob-aad-component component type.  When present in the
-      app_data_dictionary in the GroupContext
+      app_data_dictionary in the GroupContext, the out-of-band value of
+      each signaled as-needed component is also included in the Out-Of-
+      Band AAD.
 
    *  an as-needed-oob-aad-component component type.
 
@@ -159,9 +158,9 @@ Table of Contents
    [I-D.ietf-mls-extensions]
               Robert, R., "The Messaging Layer Security (MLS)
               Extensions", Work in Progress, Internet-Draft, draft-ietf-
-              mls-extensions-09, 2 March 2026,
+              mls-extensions-10, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-mls-
-              extensions-09>.
+              extensions-10>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
